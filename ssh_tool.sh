@@ -5351,7 +5351,7 @@ EOF
           read -p $'\033[1;91m请输入你的选择: \033[0m' sub_choice
             case $sub_choice in
                 1)
-                    bash <(curl -Ls https://raw.githubusercontent.com/Misaka-blog/s-ui/master/install.sh)
+                    bash <(curl -Ls https://raw.githubusercontent.com/alireza0/s-ui/master/install.sh)
                     sleep 2
                     echo ""
                     break_end
@@ -5366,6 +5366,7 @@ EOF
                     systemctl daemon-reload
 
                     rm -fr /usr/local/s-ui
+                    rm /usr/bin/s-ui
                     clear
                     echo -e "${green}sui面板已卸载${re}"
                     break_end
