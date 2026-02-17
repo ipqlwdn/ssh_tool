@@ -5009,7 +5009,7 @@ EOF
       echo -e "${green}---------------------------------------------------------${re}"
       echo -e "${green}       Sing-box多合一             Argo-tunnel${re}"
       echo -e "${green}---------------------------------------------------------${re}"
-      echo -e "${white} 1. F佬Sing-box一键脚本        5. 老王xray-2go一键脚本${re}"
+      echo -e "${white} 1. F佬Argo+Sing-box交互脚本   5. 老王xray-2go一键脚本${re}"
       echo -e "${white} 2. 老王Sing-box四合一         6. F佬ArgoX一键脚本${re}"
       echo -e "${white} 3. 勇哥Sing-box四合一         7. Suoha一键Argo脚本${re}"
       echo -e "${white} 4. 233boy.sing-box一键脚本    8. 老王小钢炮(可挂哪吒)${re}"
@@ -5030,7 +5030,7 @@ EOF
 
         1)
         clear
-            bash <(wget -qO- https://raw.githubusercontent.com/fscarmen/sing-box/main/sing-box.sh)
+            bash <(wget -qO- https://raw.githubusercontent.com/fscarmen/sba/main/sba.sh)
             break_end
         ;;
         2)
