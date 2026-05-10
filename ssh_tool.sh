@@ -513,8 +513,13 @@ fi
 
 }
 
+
 while true; do
 clear
+echo -e "    ${skyblue}当日运行：${yellow}${TODAY}次   ${skyblue}累计运行：${yellow}${TOTAL}次${re}"
+echo -e "\033[0;97m-----------------By'ipqlwdn-----------------\033[0m"
+echo -e "\033[0;97m脚本地址: https://github.com/ipqlwdn/ssh_tool\033[0m" 
+echo ""
 echo -e "${skyblue} ##  ## #####   ####       ######  ####   ####  ##      ${re}" 
 echo -e "${skyblue} ##  ## ##  ## ##            ##   ##  ## ##  ## ##      ${re}" 
 echo -e "${skyblue} ##  ## #####   ####.        ##   ##  ## ##  ## ##      ${re}" 
@@ -3510,7 +3515,7 @@ case $choice in
                     echo -e "${yellow}Windows默认用户名：${purple}Administrator${yellow} 默认密码：${purple}Teddysun.com${yellow} 默认远程连接端口${purple}3389${re}"
                     echo -e "${yellow}详细参数参考Github项目地址：https://github.com/leitbogioro/Tools${re}"
                     echo ""
-                    echo -e "${green} 1.安装Debian-11            2.安装Debian-12${re}"
+                    echo -e "${green} 1.安装Debian-12            2.安装Debian-13${re}"
                     echo -e "${green} 3.安装Ubuntu-22.04         4.安装Ubuntu-24.04${re}"
                     echo -e "${green} 5.安装Alpine-3.19          6.安装Alpine-3.20${re}"
                     echo -e "${green} 7.安装Centos-8             8.安装Centos-9${re}"
@@ -3524,17 +3529,17 @@ case $choice in
                    
                     case $sub_choice in
                         1) 
-                            echo -e "${green}开始为你安装Debian-11${re}"
+                            echo -e "${green}开始为你安装Debian-12${re}"
                             sleep 1
-                            bash InstallNET.sh -debian 11
+                            bash InstallNET.sh -debian 12
                             sleep 2
                             clear
                             restart_system
                             ;;
                         2) 
-                            echo -e "${green}开始为你安装Debian-12${re}"
+                            echo -e "${green}开始为你安装Debian-13${re}"
                             sleep 1
-                            bash InstallNET.sh -debian 12
+                            bash InstallNET.sh -debian 13
                             sleep 2
                             clear
                             restart_system
@@ -3674,10 +3679,10 @@ case $choice in
 
           10)
             clear
-            ipv6_disabled=$(sysctl -n net.ipv6.conf.all.disable_ipv6)
+            GAI_CONF="/etc/gai.conf"
 
             echo ""
-            if [ "$ipv6_disabled" -eq 1 ]; then
+            if grep -qE '^\s*precedence\s+::ffff:0:0/96\s+100' "$GAI_CONF" 2>/dev/null; then
                 echo "当前网络优先级设置: IPv4 优先"
             else
                 echo "当前网络优先级设置: IPv6 优先"
@@ -3687,18 +3692,70 @@ case $choice in
             echo ""
             echo "切换的网络优先级"
             echo "------------------------"
-            echo "1. IPv4 优先          2. IPv6 优先"
+            echo "1. IPv4 优先          2. IPv6 优先      3. 禁用 IPv6"
             echo "------------------------"
             read -p "选择优先的网络: " choice
 
             case $choice in
                 1)
-                    sysctl -w net.ipv6.conf.all.disable_ipv6=1 > /dev/null 2>&1
-                    echo "已切换为 IPv4 优先"
+                    [ ! -f "${GAI_CONF}.bak" ] && cp "$GAI_CONF" "${GAI_CONF}.bak" 2>/dev/null
+                    [ ! -f "$GAI_CONF" ] && touch "$GAI_CONF"
+                    sed -i '/^\s*precedence\s\+::ffff:0:0\/96/d' "$GAI_CONF"
+                    echo "precedence ::ffff:0:0/96  100" >> "$GAI_CONF"
+                    
+                    # 检查IPv6是否禁用
+                    v6_disabled=$(sysctl -n net.ipv6.conf.all.disable_ipv6 2>/dev/null)
+                    if [ "$v6_disabled" -eq 1 ]; then
+                        echo -e "\n${yellow}IPv6 已禁用，是否需要开启？[Y/N]${re}"
+                        read -p "是否需要开启？[Y/N]" choice
+                        if [[ "$choice" =~ [Yy] ]]; then
+                            sysctl -w net.ipv6.conf.all.disable_ipv6=0 >/dev/null 2>&1
+                            sysctl -w net.ipv6.conf.default.disable_ipv6=0 >/dev/null 2>&1
+                            sysctl -w net.ipv6.conf.lo.disable_ipv6=0 >/dev/null 2>&1
+
+                            # 写入持久化
+                            sed -i '/net.ipv6.conf.all.disable_ipv6/d' /etc/sysctl.conf
+                            sed -i '/net.ipv6.conf.default.disable_ipv6/d' /etc/sysctl.conf
+                            sed -i '/net.ipv6.conf.lo.disable_ipv6/d' /etc/sysctl.conf
+
+                            {
+                                echo "net.ipv6.conf.all.disable_ipv6 = 0"
+                                echo "net.ipv6.conf.default.disable_ipv6 = 0"
+                                echo "net.ipv6.conf.lo.disable_ipv6 = 0"
+                            } >> /etc/sysctl.conf
+
+                            sysctl -p >/dev/null 2>&1
+                        fi
+                    fi
+                    echo -e "\n${green}已切换为 IPv4 优先(IPv6 仍然可用，只是优先级降低)${re}\n"
                     ;;
                 2)
+                    [ ! -f "${GAI_CONF}.bak" ] && cp "$GAI_CONF" "${GAI_CONF}.bak" 2>/dev/null
+                    [ ! -f "$GAI_CONF" ] && touch "$GAI_CONF"
+                    # 移除 IPv4 优先规则即可恢复默认 IPv6 优先
+                    sed -i '/^\s*precedence\s\+::ffff:0:0\/96/d' "$GAI_CONF"
                     sysctl -w net.ipv6.conf.all.disable_ipv6=0 > /dev/null 2>&1
-                    echo "已切换为 IPv6 优先"
+                    echo -e "\n${green}已切换为 IPv6 优先(IPv4 仍然可用，只是优先级降低)${re}\n"
+                    ;;
+                3)
+                    sysctl -w net.ipv6.conf.all.disable_ipv6=1 >/dev/null 2>&1
+                    sysctl -w net.ipv6.conf.default.disable_ipv6=1 >/dev/null 2>&1
+                    sysctl -w net.ipv6.conf.lo.disable_ipv6=1 >/dev/null 2>&1
+
+                    sed -i '/net.ipv6.conf.all.disable_ipv6/d' /etc/sysctl.conf
+                    sed -i '/net.ipv6.conf.default.disable_ipv6/d' /etc/sysctl.conf
+                    sed -i '/net.ipv6.conf.lo.disable_ipv6/d' /etc/sysctl.conf
+
+                    {
+                        echo "net.ipv6.conf.all.disable_ipv6 = 1"
+                        echo "net.ipv6.conf.default.disable_ipv6 = 1"
+                        echo "net.ipv6.conf.lo.disable_ipv6 = 1"
+                    } >> /etc/sysctl.conf
+
+                    sysctl -p >/dev/null 2>&1
+                    # 同时移除 IPv4 优先规则（禁用 IPv6 后此规则无意义）
+                    sed -i '/^\s*precedence\s\+::ffff:0:0\/96/d' "$GAI_CONF" 2>/dev/null
+                    echo -e "\n${yellow}✓ IPv6 已在系统层禁用${re}\n"
                     ;;
                 *)
                     echo "无效的选择"
@@ -5009,7 +5066,7 @@ EOF
       echo -e "${green}---------------------------------------------------------${re}"
       echo -e "${green}       Sing-box多合一             Argo-tunnel${re}"
       echo -e "${green}---------------------------------------------------------${re}"
-      echo -e "${white} 1. F佬Argo+Sing-box交互脚本   5. 老王xray-2go一键脚本${re}"
+      echo -e "${white} 1. F佬Sing-box一键脚本        5. 老王xray-2go一键脚本${re}"
       echo -e "${white} 2. 老王Sing-box四合一         6. F佬ArgoX一键脚本${re}"
       echo -e "${white} 3. 勇哥Sing-box四合一         7. Suoha一键Argo脚本${re}"
       echo -e "${white} 4. 233boy.sing-box一键脚本    8. 老王小钢炮(可挂哪吒)${re}"
@@ -5030,7 +5087,7 @@ EOF
 
         1)
         clear
-            bash <(wget -qO- https://raw.githubusercontent.com/fscarmen/sba/main/sba.sh)
+            bash <(wget -qO- https://raw.githubusercontent.com/fscarmen/sing-box/main/sing-box.sh)
             break_end
         ;;
         2)
@@ -5366,7 +5423,6 @@ EOF
                     systemctl daemon-reload
 
                     rm -fr /usr/local/s-ui
-                    rm /usr/bin/s-ui
                     clear
                     echo -e "${green}sui面板已卸载${re}"
                     break_end
@@ -6634,6 +6690,17 @@ EOF
 
                         if [ "$confirm" == "y" ] || [ "$confirm" == "Y" ]; then
 
+                            # 固定 dns，防止修改导致失败开小鸡失败
+                            systemctl disable systemd-resolved --now > /dev/null 2>&1
+                            rm -rf /etc/resolv.conf > /dev/null 2>&1
+                            cat >/etc/resolv.conf <<EOF
+nameserver 8.8.8.8
+nameserver 1.1.1.1
+nameserver 2606:4700:4700::1111
+nameserver 2001:4860:4860::8888
+EOF
+                            chattr +i /etc/resolv.conf > /dev/null 2>&1
+                            
                             echo -e "${yellow}开始进行安装incus主体...${re}"
                             sleep 1
                             curl -L https://raw.githubusercontent.com/oneclickvirt/incus/main/scripts/incus_install.sh -o incus_install.sh && chmod +x incus_install.sh && bash incus_install.sh
