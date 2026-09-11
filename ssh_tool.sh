@@ -16,7 +16,7 @@ skyblue='\e[1;96m'
 create_shortcut() {
     wrapper_content='#!/bin/bash
 # 在线获取最新脚本并执行
-SCRIPT_URL="https://raw.githubusercontent.com/eooce/ssh_tool/main/ssh_tool.sh"
+SCRIPT_URL="https://raw.githubusercontent.com/ipqlwdn/ssh_tool/main/ssh_tool.sh"
 TEMP_SCRIPT="/tmp/ssh_tool_latest.sh"
 
 # 下载最新脚本（屏蔽输出）
@@ -512,19 +512,12 @@ else
 fi
 
 }
-# 运行统计
-sum_run_times() {
-  local COUNT=$(curl -s -m 2 "https://count.eooce.dpdns.org/?url=https://raw.githubusercontent.com/eooce/ssh_tool/main/ssh_tool.sh") &&
-  TODAY=$(echo "$COUNT" | sed -n 's/.*"daily_count": \([0-9]\+\).*/\1/p') &&
-  TOTAL=$(echo "$COUNT" | sed -n 's/.*"total_count": \([0-9]\+\).*/\1/p')
-}
-sum_run_times
+
 
 while true; do
 clear
-echo -e "    ${skyblue}当日运行：${yellow}${TODAY}次   ${skyblue}累计运行：${yellow}${TOTAL}次${re}"
-echo -e "\033[0;97m-----------------By'eooce-----------------\033[0m"
-echo -e "\033[0;97m脚本地址: https://github.com/eooce/ssh_tool\033[0m" 
+echo -e "\033[0;97m-----------------By'ipqlwdn-----------------\033[0m"
+echo -e "\033[0;97m脚本地址: https://github.com/ipqlwdn/ssh_tool\033[0m" 
 echo ""
 echo -e "${skyblue} ##  ## #####   ####       ######  ####   ####  ##      ${re}" 
 echo -e "${skyblue} ##  ## ##  ## ##            ##   ##  ## ##  ## ##      ${re}" 
@@ -4710,7 +4703,7 @@ EOF
 
                 case $sub_choice in
                     1)
-                        curl https://raw.githubusercontent.com/eooce/ssh_tool/main/check_cpu.sh -o check_cpu.sh && chmod +x check_cpu.sh && bash check_cpu.sh
+                        curl https://raw.githubusercontent.com/ipqlwdn/ssh_tool/main/check_cpu.sh -o check_cpu.sh && chmod +x check_cpu.sh && bash check_cpu.sh
 
                         # 添加Cron任务
                         (crontab -l 2>/dev/null; echo "*/10 * * * * /bin/bash /root/check_cpu.sh >> /root/check_cpu.log 2>&1") | crontab -
@@ -4718,7 +4711,7 @@ EOF
                         break_end
                     ;;
                     2)
-                        curl https://raw.githubusercontent.com/eooce/ssh_tool/main/check_memory.sh -o check_memory.sh && chmod +x check_memory.sh && bash check_memory.sh
+                        curl https://raw.githubusercontent.com/ipqlwdn/ssh_tool/main/check_memory.sh -o check_memory.sh && chmod +x check_memory.sh && bash check_memory.sh
 
                         # 添加Cron任务
                         (crontab -l 2>/dev/null; echo "*/10 * * * * /bin/bash /root/check_memory.sh >> /root/check_cpu.log 2>&1") | crontab -
@@ -4726,7 +4719,7 @@ EOF
                         break_end                         
                     ;;
                     3)
-                        curl https://raw.githubusercontent.com/eooce/ssh_tool/main/check_traffic.sh -o check_traffic.sh && chmod +x check_traffic.sh && bash check_traffic.sh
+                        curl https://raw.githubusercontent.com/ipqlwdn/ssh_tool/main/check_traffic.sh -o check_traffic.sh && chmod +x check_traffic.sh && bash check_traffic.sh
 
                         # 添加Cron任务
                         (crontab -l 2>/dev/null; echo "*/10 * * * * /bin/bash /root/check_traffic.sh >> /root/check_traffic.log 2>&1") | crontab -
@@ -4734,7 +4727,7 @@ EOF
                         break_end                         
                     ;;
                     4)
-                        curl https://raw.githubusercontent.com/eooce/ssh_tool/main/check.sh -o check.sh && chmod +x check.sh && bash check.sh
+                        curl https://raw.githubusercontent.com/ipqlwdn/ssh_tool/main/check.sh -o check.sh && chmod +x check.sh && bash check.sh
 
                         # 添加Cron任务
                         (crontab -l 2>/dev/null; echo "*/10 * * * * /bin/bash /root/check.sh >> /root/check.log 2>&1") | crontab -
@@ -5098,7 +5091,7 @@ EOF
         ;;
         2)
         clear
-            bash <(curl -Ls https://raw.githubusercontent.com/eooce/sing-box/main/sing-box.sh)
+            bash <(curl -Ls https://raw.githubusercontent.com/ipqlwdn/sing-box/main/sing-box.sh)
             break_end
         ;;
         3)
@@ -5114,7 +5107,7 @@ EOF
         ;;
         5)
         clear
-            bash <(curl -Ls https://github.com/eooce/xray-2go/raw/main/xray_2go.sh)
+            bash <(curl -Ls https://github.com/ipqlwdn/xray-2go/raw/main/xray_2go.sh)
             break_end 
         ;;
         6)
@@ -5184,9 +5177,9 @@ EOF
                         fi
                     done
                     if [ -f "/etc/alpine-release" ]; then
-                        SERVER_PORT=$port bash -c "$(curl -L https://raw.githubusercontent.com/eooce/scripts/master/containers-shell/hy2.sh)"
+                        SERVER_PORT=$port bash -c "$(curl -L https://raw.githubusercontent.com/ipqlwdn/scripts/master/containers-shell/hy2.sh)"
                     else
-                        HY2_PORT=$port bash -c "$(curl -L https://raw.githubusercontent.com/eooce/scripts/master/Hysteria2.sh)"
+                        HY2_PORT=$port bash -c "$(curl -L https://raw.githubusercontent.com/ipqlwdn/scripts/master/Hysteria2.sh)"
                     fi
                     sleep 1
                     break_end
@@ -5245,12 +5238,12 @@ EOF
         ;;     
         10)
         clear
-            bash <(curl -Ls https://raw.githubusercontent.com/eooce/scripts/master/juicity.sh)
+            bash <(curl -Ls https://raw.githubusercontent.com/ipqlwdn/scripts/master/juicity.sh)
             break_end
         ;;   
         11)
         clear
-            bash -c "$(curl -L https://raw.githubusercontent.com/eooce/scripts/master/tuic.sh)"
+            bash -c "$(curl -L https://raw.githubusercontent.com/ipqlwdn/scripts/master/tuic.sh)"
             break_end
         ;;      
 
@@ -5300,7 +5293,7 @@ EOF
                     break
                 fi
             done
-            PORT=$port bash <(curl -Ls https://raw.githubusercontent.com/eooce/scripts/master/mtp.sh)
+            PORT=$port bash <(curl -Ls https://raw.githubusercontent.com/ipqlwdn/scripts/master/mtp.sh)
             sleep 1
             break_end
         ;;
@@ -5331,9 +5324,9 @@ EOF
                         fi
                     done
                     if [ -f "/etc/alpine-release" ]; then
-                        PORT=$port bash -c "$(curl -L https://raw.githubusercontent.com/eooce/scripts/master/test.sh)"
+                        PORT=$port bash -c "$(curl -L https://raw.githubusercontent.com/ipqlwdn/scripts/master/test.sh)"
                     else
-                        PORT=$port bash -c "$(curl -L https://raw.githubusercontent.com/eooce/xray-reality/master/reality.sh)"
+                        PORT=$port bash -c "$(curl -L https://raw.githubusercontent.com/ipqlwdn/xray-reality/master/reality.sh)"
                     fi
                     sleep 1
                     break_end
@@ -5414,7 +5407,7 @@ EOF
           read -p $'\033[1;91m请输入你的选择: \033[0m' sub_choice
             case $sub_choice in
                 1)
-                    bash <(curl -Ls https://raw.githubusercontent.com/Misaka-blog/s-ui/master/install.sh)
+                    bash <(curl -Ls https://raw.githubusercontent.com/ipqlwdn/s-ui/main/install.sh)
                     sleep 2
                     echo ""
                     break_end
@@ -6467,7 +6460,7 @@ EOF
             5)
                 clear
                 install wget
-                wget -N --no-check-certificate https://raw.githubusercontent.com/eooce/lxdpro/main/lxdpro.sh && chmod +x lxdpro.sh && bash lxdpro.sh
+                wget -N --no-check-certificate https://raw.githubusercontent.com/ipqlwdn/lxdpro/main/lxdpro.sh && chmod +x lxdpro.sh && bash lxdpro.sh
 
                 break_end
             
@@ -6957,7 +6950,7 @@ EOF
 
   00)
     cd ~
-    curl -sS -O https://raw.githubusercontent.com/eooce/ssh_tool/main/update_log.sh && chmod +x update_log.sh && ./update_log.sh
+    curl -sS -O https://raw.githubusercontent.com/ipqlwdn/ssh_tool/main/update_log.sh && chmod +x update_log.sh && ./update_log.sh
     rm update_log.sh
     echo ""
     echo -e "${green}脚本已更新到最新版本！${re}"
